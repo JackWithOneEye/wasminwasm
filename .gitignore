@@ -1,0 +1,9 @@
+dist/
+style/
+target/
+wasm/
+Cargo.lock
+**/*.rs.bk
+
+node_modules/
+pnpm-lock.yaml
