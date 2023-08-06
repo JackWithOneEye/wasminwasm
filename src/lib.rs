@@ -17,13 +17,14 @@ pub fn App(cx: Scope, go_wasm_func: Function, zig_wasm: ZigWasm) -> impl IntoVie
         }
         .to_string(),
     );
-    view! {
-        cx,
+    view! { cx,
         <div class="m-4">
             <h1 class="font-bold text-4xl">"wasminwasm"</h1>
             <div class="p-4 flex flex-col gap-2">
                 <div class="flex flex-col">
-                    <label class="mb-1" for="input">"put in something:"</label>
+                    <label class="mb-1" for="input">
+                        "put in something:"
+                    </label>
                     <input
                         class="p-1 border-solid border rounded-md border-black dark:border-white dark:bg-slate-800"
                         id="input"
@@ -32,8 +33,8 @@ pub fn App(cx: Scope, go_wasm_func: Function, zig_wasm: ZigWasm) -> impl IntoVie
                         on:input=move |ev| { set_input(event_target_value(&ev)) }
                     />
                 </div>
-                <Go input go_wasm_func />
-                <Zig input zig_wasm />
+                <Go input go_wasm_func/>
+                <Zig input zig_wasm/>
             </div>
         </div>
     }
@@ -49,12 +50,11 @@ fn Go(cx: Scope, input: ReadSignal<String>, go_wasm_func: Function) -> impl Into
             .as_string()
             .unwrap()
     };
-    view! {
-       cx,
-       <div class="flex gap-1">
-           <span class="font-semibold">"Go WASM says:"</span>
-           <span>"\""{go_wasm_says}"\""</span>
-       </div>
+    view! { cx,
+        <div class="flex gap-1">
+            <span class="font-semibold">"Go WASM says:"</span>
+            <span>{'"'} {go_wasm_says} {'"'}</span>
+        </div>
     }
 }
 
@@ -67,11 +67,10 @@ fn Zig(cx: Scope, input: ReadSignal<String>, zig_wasm: ZigWasm) -> impl IntoView
             String::from("ERROR!")
         }
     };
-    view! {
-        cx,
+    view! { cx,
         <div class="flex gap-1">
             <span class="font-semibold">"Zig WASM says:"</span>
-            <span>"\""{zig_wasm_says}"\""</span>
+            <span>{'"'} {zig_wasm_says} {'"'}</span>
         </div>
     }
 }

@@ -58,7 +58,7 @@ fn main() {
         let zig_wasm = init_zig_wasm().await.unwrap_throw();
 
         mount_to_body(|cx| {
-            view! { cx, <App go_wasm_func zig_wasm /> }
+            view! { cx, <App go_wasm_func zig_wasm/> }
         });
     });
 }
