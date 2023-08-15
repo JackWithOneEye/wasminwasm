@@ -26,7 +26,7 @@ impl ZigWasm {
     pub fn reverse_string(&self, input: &String) -> Result<String, JsValue> {
         let call_ctx = JsValue::undefined();
         let input_len = input.as_bytes().len() as u32;
-        let input_dest_ptr: u32 = self
+        let input_dest_ptr = self
             .malloc_u8
             .call1(&call_ctx, &input.len().into())?
             .as_f64()
@@ -48,10 +48,7 @@ impl ZigWasm {
         self.free_u8
             .call2(&call_ctx, &input_dest_ptr.into(), &input_len.into())?;
 
-        match String::from_utf8(output_buffer.to_vec()) {
-            Ok(output) => Ok(output),
-            Err(e) => Err(JsValue::from(&e.to_string())),
-        }
+        String::from_utf8(output_buffer.to_vec()).map_err(|e| JsValue::from(&e.to_string()))
     }
 
     fn wasm_mem_subarray(&self, begin: u32, end: u32) -> Uint8Array {
@@ -59,10 +56,8 @@ impl ZigWasm {
     }
 
     fn bigint_to_u64(bigint: BigInt) -> Result<u64, JsValue> {
-        let as_string: String = bigint.to_string(10)?.into();
-        match as_string.parse::<u64>() {
-            Ok(res) => Ok(res),
-            Err(e) => Err(e.to_string().into()),
-        }
+        String::from(bigint.to_string(10)?)
+            .parse::<u64>()
+            .map_err(|e| e.to_string().into())
     }
 }
