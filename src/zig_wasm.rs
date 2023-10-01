@@ -1,6 +1,7 @@
 use js_sys::{BigInt, Function, Uint8Array, WebAssembly};
 use wasm_bindgen::{JsCast, JsValue};
 
+#[derive(Clone)]
 pub struct ZigWasm {
     free_u8: Function,
     malloc_u8: Function,

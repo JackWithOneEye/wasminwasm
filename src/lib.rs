@@ -3,13 +3,13 @@ use leptos::*;
 use rand::Rng;
 use wasm_bindgen::JsValue;
 pub mod zig_wasm;
+// pub mod go;
 use zig_wasm::ZigWasm;
 
 #[component]
-pub fn App(cx: Scope, go_wasm_func: Function, zig_wasm: ZigWasm) -> impl IntoView {
+pub fn App(go_wasm_func: Function, zig_wasm: ZigWasm) -> impl IntoView {
     let mut rng = rand::thread_rng();
     let (input, set_input) = create_signal(
-        cx,
         if rng.gen::<f32>() < 0.5 {
             "WASM UP YOUR ASS!!!"
         } else {
@@ -17,7 +17,7 @@ pub fn App(cx: Scope, go_wasm_func: Function, zig_wasm: ZigWasm) -> impl IntoVie
         }
         .to_string(),
     );
-    view! { cx,
+    view! {
         <div class="m-4">
             <h1 class="font-bold text-4xl">"wasminwasm"</h1>
             <div class="p-4 flex flex-col gap-2">
@@ -41,7 +41,7 @@ pub fn App(cx: Scope, go_wasm_func: Function, zig_wasm: ZigWasm) -> impl IntoVie
 }
 
 #[component]
-fn Go(cx: Scope, input: ReadSignal<String>, go_wasm_func: Function) -> impl IntoView {
+fn Go(input: ReadSignal<String>, go_wasm_func: Function) -> impl IntoView {
     let call_ctx = JsValue::undefined();
     let go_wasm_says = move || {
         go_wasm_func
@@ -50,7 +50,7 @@ fn Go(cx: Scope, input: ReadSignal<String>, go_wasm_func: Function) -> impl Into
             .as_string()
             .unwrap()
     };
-    view! { cx,
+    view! {
         <div class="flex gap-1">
             <span class="font-semibold">"Go WASM says:"</span>
             <span>{'"'} {go_wasm_says} {'"'}</span>
@@ -59,7 +59,7 @@ fn Go(cx: Scope, input: ReadSignal<String>, go_wasm_func: Function) -> impl Into
 }
 
 #[component]
-fn Zig(cx: Scope, input: ReadSignal<String>, zig_wasm: ZigWasm) -> impl IntoView {
+fn Zig(input: ReadSignal<String>, zig_wasm: ZigWasm) -> impl IntoView {
     let zig_wasm_says = move || match zig_wasm.reverse_string(&input()) {
         Ok(res) => res,
         Err(e) => {
@@ -67,7 +67,7 @@ fn Zig(cx: Scope, input: ReadSignal<String>, zig_wasm: ZigWasm) -> impl IntoView
             String::from("ERROR!")
         }
     };
-    view! { cx,
+    view! {
         <div class="flex gap-1">
             <span class="font-semibold">"Zig WASM says:"</span>
             <span>{'"'} {zig_wasm_says} {'"'}</span>

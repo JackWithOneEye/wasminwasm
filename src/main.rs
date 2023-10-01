@@ -1,5 +1,5 @@
 use js_sys::{Function, Object, Reflect, WebAssembly};
-use leptos::{leptos_dom::console_log, mount_to_body, spawn_local, view, window};
+use leptos::{leptos_dom::logging::console_log, mount_to_body, spawn_local, view, window};
 use wasm_bindgen::{prelude::Closure, JsCast, JsValue, UnwrapThrowExt};
 use wasm_bindgen_futures::JsFuture;
 use wasminwasm::{zig_wasm::ZigWasm, App};
@@ -57,8 +57,8 @@ fn main() {
         let go_wasm_func = init_go_wasm_func().await.unwrap_throw();
         let zig_wasm = init_zig_wasm().await.unwrap_throw();
 
-        mount_to_body(|cx| {
-            view! { cx, <App go_wasm_func zig_wasm/> }
-        });
+        mount_to_body(
+            move || view! {  <App go_wasm_func=go_wasm_func.clone() zig_wasm=zig_wasm.clone()/> },
+        );
     });
 }
